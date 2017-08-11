@@ -1,0 +1,7 @@
+{{ $masterIp := env "POSTGRES_MASTER_IP" }}
+{{ $user := env "POSTGRES_USER" }}
+{{ $password := env "POSTGRES_PASSWORD" }}
+
+standby_mode = 'on'
+primary_conninfo = 'host={{$masterIp}} port=5432 user={{$user}} password={{$password}}'
+trigger_file = '/etc/postgresql.trigger.5432'

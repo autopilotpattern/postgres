@@ -1,0 +1,37 @@
+# - Connection Settings -
+listen_addresses = '*'
+port = 5432
+max_connections = 100
+
+# - Memory -
+shared_buffers = 128MB			# min 128kB
+dynamic_shared_memory_type = posix
+
+# - What to Log -
+log_timezone = 'US/Eastern'
+
+# - Locale and Formatting -
+datestyle = 'iso, mdy'
+timezone = 'US/Eastern'
+
+# These settings are initialized by initdb, but they can be changed.
+lc_messages = 'en_US.UTF-8'			# locale for system error message
+lc_monetary = 'en_US.UTF-8'			# locale for monetary formatting
+lc_numeric = 'en_US.UTF-8'			# locale for number formatting
+lc_time = 'en_US.UTF-8'				  # locale for time formatting
+
+# default configuration for text search
+default_text_search_config = 'pg_catalog.english'
+
+# Replication
+hot_standby = on
+
+{{ $postgresMaster := env "POSTGRES_MASTER" }}
+{{ if $postgresMaster }}
+# Master Server Replication Settings
+wal_level = hot_standby
+max_wal_senders = 8
+wal_keep_segments = 100
+archive_mode = on
+archive_command = 'cd .'
+{{ end }}

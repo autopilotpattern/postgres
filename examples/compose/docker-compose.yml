@@ -1,0 +1,39 @@
+version: '2.1'
+# Postgres demonstration of the Autopilot pattern
+
+services:
+  db:
+    build: ../../
+    mem_limit: 1g
+    restart: always
+    dns:
+      - 127.0.0.1
+    ports:
+      - 5432
+    environment:
+      - CONSUL=consul
+      - CONSUL_AGENT=1
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
+      - PGDATA=/var/lib/postgresql/data
+    links:
+      - consul:consul
+
+  # Start with a single host which will bootstrap the cluster.
+  # In production we'll want to use an HA cluster.
+  consul:
+    image: autopilotpattern/consul:0.7.2-r0.8
+    restart: always
+    mem_limit: 128m
+    ports:
+      - 8500:8500
+    dns:
+      - 127.0.0.1
+    command: >
+      /usr/local/bin/containerpilot
+      /bin/consul agent -server
+        -config-dir=/etc/consul
+        -log-level=err
+        -bootstrap-expect 1
+        -ui-dir /ui

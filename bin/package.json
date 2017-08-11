@@ -1,0 +1,15 @@
+{
+  "name": "config-postgres",
+  "version": "1.0.0",
+  "private": "true",
+  "dependencies": {
+    "consulite": "2.0.0",
+    "debug": "3.0.0"
+  },
+  "devDependencies": {
+    "belly-button": "4.x.x"
+  },
+  "scripts": {
+    "lint": "belly-button"
+  }
+}
